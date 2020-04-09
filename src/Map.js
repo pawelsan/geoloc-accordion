@@ -1,18 +1,28 @@
 import React, { Component } from 'react';
 // import mapboxgl from 'mapbox-gl';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, { Marker } from 'react-map-gl';
 
 require('dotenv').config();
 
 class Map extends Component {
+    // state = {
+    //     viewport: {
+    //         width: "100vw",
+    //         height: "100vh",
+    //         latitude: 42.430472,
+    //         longitude: -123.334102,
+    //         zoom: 16
+    //     }
+    // };
     state = {
         viewport: {
-            width: "50vw",
-            height: "50vh",
-            latitude: 42.430472,
-            longitude: -123.334102,
-            zoom: 16
-        }
+            longitude: -122.4,
+            latitude: 37.8,
+            zoom: 14,
+            bearing: 0,
+            pitch: 0
+        },
+        coordinates: []
     };
 
     // componentDidMount() {
@@ -52,14 +62,42 @@ class Map extends Component {
     //     });
     // }
     // }
+    addMarker(e) {
+        // this.setState({
+        //     markers: this.state.markers.push({
+        //         longitude: e.lngLat[0],
+        //         latitude: e.lngLat[1]
+        //     })
+        // })
+        this.setState({
+            coordinates: this.state.coordinates.concat({
+                longitude: e.lngLat[0],
+                latitude: e.lngLat[1]
+            })
+        })
+        console.log(this.state.coordinates)
+    }
 
     render() {
         return (
             <ReactMapGL
                 {...this.state.viewport}
-                mapStyle="mapbox://styles/mapbox/outdoors-v11"
+                width="100%"
+                height="50vh"
+                mapStyle="mapbox://styles/mapbox/streets-v11"
+                onViewportChange={viewport => this.setState({ viewport })}
+                onClick={(e) => this.addMarker(e)}
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
             >
+                {this.state.coordinates.map(marker =>
+                    <Marker
+                        key={`${marker.longitude}${marker.latitude}`}
+                        longitude={marker.longitude}
+                        latitude={marker.latitude}
+                    >
+                        <i class="fas fa-map-marker-alt"></i>
+                    </Marker>)}
+
             </ReactMapGL>
 
             // <div>
