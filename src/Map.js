@@ -1,84 +1,70 @@
 import React, { Component } from 'react';
 // import mapboxgl from 'mapbox-gl';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 
 require('dotenv').config();
 
 class Map extends Component {
-    // state = {
-    //     viewport: {
-    //         width: "100vw",
-    //         height: "100vh",
-    //         latitude: 42.430472,
-    //         longitude: -123.334102,
-    //         zoom: 16
-    //     }
-    // };
+
     state = {
         viewport: {
-            longitude: -122.4,
-            latitude: 37.8,
+            longitude: 20.43871490,
+            latitude: 52.0565846,
             zoom: 14,
             bearing: 0,
             pitch: 0
         },
-        coordinates: []
+        coordinates: [],
+        selectedMarker: ''
     };
 
-    // componentDidMount() {
-    //     const map = new mapboxgl.Map({
-    //         container: this.mapContainer,
-    //         style: 'mapbox://styles/mapbox/streets-v11',
-    //         center: [this.state.lng, this.state.lat],
-    //         zoom: this.state.zoom
-    //     });
+    loadMarkers() {
+        return this.state.coordinates.map(marker =>
+            <Marker
+                key={marker.id}
+                longitude={marker.longitude}
+                latitude={marker.latitude}
+                draggable
+                onDragEnd={(e) => this.markerDragEnd(e, marker)}
+            >
+                <i
+                    onDoubleClick={() => this.selectMarker(marker)}
+                    className="fas fa-map-marker-alt fa-2x"
+                ></i>
+            </Marker>)
+    }
 
-    //     map.on('move', () => {
-    //         this.setState({
-    //             lng: map.getCenter().lng.toFixed(4),
-    //             lat: map.getCenter().lat.toFixed(4),
-    //             zoom: map.getZoom().toFixed(2)
-    //         });
-    //     });
-
-    // this.setState({
-    //     map: new mapboxgl.Map({
-    //         container: this.mapContainer,
-    //         style: 'mapbox://styles/mapbox/streets-v11',
-    //         center: [this.state.lng, this.state.lat],
-    //         zoom: this.state.zoom
-    //     })
-    // });
-
-
-    // componentDidUpdate() {
-    //     this.state.map.resize();
-    //     this.state.map.on('move', () => {
-    //         this.setState({
-    //             lng: this.state.map.getCenter().lng.toFixed(4),
-    //             lat: this.state.map.getCenter().lat.toFixed(4),
-    //             zoom: this.state.map.getZoom().toFixed(2)
-    //         });
-    //     });
-    // }
-    // }
     addMarker(e) {
-        // this.setState({
-        //     markers: this.state.markers.push({
-        //         longitude: e.lngLat[0],
-        //         latitude: e.lngLat[1]
-        //     })
-        // })
         this.setState({
             coordinates: this.state.coordinates.concat({
+                id: new Date().getTime(),
                 longitude: e.lngLat[0],
                 latitude: e.lngLat[1]
             })
         })
-        console.log(this.state.coordinates)
     }
+    selectMarker(marker) {
+        this.setState({
+            selectedMarker: marker
+        });
+    }
+    closePopup() {
+        this.setState({
+            selectedMarker: ''
+        });
+    };
+    markerDragEnd(e, marker) {
+        const index = this.state.coordinates.findIndex(coord => coord.id === marker.id);
+        const temporaryArray = [...this.state.coordinates];
+        temporaryArray[index].longitude = e.lngLat[0];
+        temporaryArray[index].latitude = e.lngLat[1];
+        this.setState({
+            coordinates: temporaryArray
+        });
+    };
 
     render() {
+        const { latitude, longitude } = this.state.selectedMarker
         return (
             <ReactMapGL
                 {...this.state.viewport}
@@ -89,23 +75,18 @@ class Map extends Component {
                 onClick={(e) => this.addMarker(e)}
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
             >
-                {this.state.coordinates.map(marker =>
-                    <Marker
-                        key={`${marker.longitude}${marker.latitude}`}
-                        longitude={marker.longitude}
-                        latitude={marker.latitude}
+                {this.loadMarkers()}
+                {this.state.selectedMarker !== '' ? (
+                    <Popup
+                        latitude={latitude}
+                        longitude={longitude}
+                        onClose={() => this.closePopup()}
                     >
-                        <i class="fas fa-map-marker-alt"></i>
-                    </Marker>)}
+                        <p>Lat: {latitude}<br />Lng: {longitude}</p>
+                    </Popup>
+                ) : null}
 
             </ReactMapGL>
-
-            // <div>
-            //     <div className='sidebarStyle'>
-            //         <div>Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom: {this.state.zoom}</div>
-            //     </div>
-            //     <div ref={el => this.mapContainer = el} className='mapContainer' />
-            // </div>
         );
     }
 }
