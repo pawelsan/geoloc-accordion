@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import './assets/css/App.css';
 import { Container } from 'reactstrap';
-import Accordion from './Accordion';
+import Accordion from './components/Accordion';
 
 class App extends Component {
   state = {
