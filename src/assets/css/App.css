@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  margin: 10vh 0;
 }
 .table th, .table td {
   padding: 0 .75rem;

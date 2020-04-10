@@ -3,6 +3,7 @@ import Map from "./Map";
 import List from "./List"
 // reactstrap components
 import {
+    Button,
     Card,
     CardHeader,
     CardBody,
@@ -25,23 +26,26 @@ function Accordion({ state, handleViewport, addMarker, selectMarker, closePopup,
                 <div aria-multiselectable={true} id="accordion" role="tablist">
                     <Card className="no-transition">
                         <CardHeader className="card-collapse" id="headingOne" role="tab">
-                            <h5 className="mb-0 panel-title">
-                                <a
-                                    aria-controls="collapseOne"
-                                    aria-expanded={collapses.includes(1)}
-                                    className="collapsed"
-                                    data-parent="#accordion"
-                                    href="#pablo"
-                                    id="collapseOne"
-                                    onClick={e => {
-                                        e.preventDefault();
-                                        changeCollapse(1);
-                                    }}
-                                >
-                                    Mapa{" "}
-                                    <i className="nc-icon nc-minimal-down" />
-                                </a>
-                            </h5>
+                            <Button
+                                className="btn-round panel-title collapsed"
+                                color="primary"
+                                size="lg"
+                                outline
+                                aria-controls="collapseOne"
+                                aria-expanded={collapses.includes(1)}
+                                data-parent="#accordion"
+                                href="#pablo"
+                                id="collapseOne"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    changeCollapse(1);
+                                }}
+                            >
+                                <i
+                                    className="fas fa-map-marker-alt pr-2"
+                                ></i>
+                                <span>Mapa</span>
+                            </Button>
                         </CardHeader>
                         <Collapse isOpen={collapses.includes(1)}>
                             <CardBody>
@@ -60,23 +64,26 @@ function Accordion({ state, handleViewport, addMarker, selectMarker, closePopup,
                             id="headingTwo"
                             role="tab"
                         >
-                            <h5 className="mb-0 panel-title">
-                                <a
-                                    aria-controls="collapseTwo"
-                                    aria-expanded={collapses.includes(2)}
-                                    className="collapsed"
-                                    data-parent="#accordion"
-                                    href="#pablo"
-                                    id="collapseTwo"
-                                    onClick={e => {
-                                        e.preventDefault();
-                                        changeCollapse(2);
-                                    }}
-                                >
-                                    Lista znaczników{" "}
-                                    <i className="nc-icon nc-minimal-down" />
-                                </a>
-                            </h5>
+                            <Button
+                                className="btn-round panel-title collapsed"
+                                color="primary"
+                                size="lg"
+                                outline
+                                aria-controls="collapseOne"
+                                aria-expanded={collapses.includes(2)}
+                                data-parent="#accordion"
+                                href="#pablo"
+                                id="collapseOne"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    changeCollapse(2);
+                                }}
+                            >
+                                <i
+                                    className="fas fa-map-marker-alt pr-2"
+                                ></i>
+                                <span>Współrzędne</span>
+                            </Button>
                         </CardHeader>
                         <Collapse isOpen={collapses.includes(2)}>
                             <CardBody>
