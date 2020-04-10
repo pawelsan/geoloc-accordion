@@ -18,7 +18,7 @@ class Map extends Component {
         selectedMarker: ''
     };
 
-    addMarker(e) {
+    addMarker = (e) => {
         this.setState({
             coordinates: this.state.coordinates.concat({
                 id: new Date().getTime(),
@@ -33,7 +33,7 @@ class Map extends Component {
             selectedMarker: marker
         });
     }
-    closePopup() {
+    closePopup = () => {
         this.setState({
             selectedMarker: ''
         });
@@ -58,7 +58,7 @@ class Map extends Component {
                 height="50vh"
                 mapStyle="mapbox://styles/mapbox/streets-v11"
                 onViewportChange={viewport => this.setState({ viewport })}
-                onClick={(e) => this.addMarker(e)}
+                onClick={this.addMarker}
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
             >
                 <Markers
@@ -70,7 +70,7 @@ class Map extends Component {
                     <Popup
                         latitude={latitude}
                         longitude={longitude}
-                        onClose={() => this.closePopup()}
+                        onClose={this.closePopup}
                     >
                         <p>Lat: {latitude}<br />Lng: {longitude}</p>
                     </Popup>
