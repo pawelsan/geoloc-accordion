@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import mapboxgl from 'mapbox-gl';
-import ReactMapGL, { Marker, Popup } from 'react-map-gl';
+import ReactMapGL, { Popup } from 'react-map-gl';
+import Markers from "./Markers";
 
 require('dotenv').config();
 
@@ -18,22 +18,6 @@ class Map extends Component {
         selectedMarker: ''
     };
 
-    loadMarkers() {
-        return this.state.coordinates.map(marker =>
-            <Marker
-                key={marker.id}
-                longitude={marker.longitude}
-                latitude={marker.latitude}
-                draggable
-                onDragEnd={(e) => this.markerDragEnd(e, marker)}
-            >
-                <i
-                    onDoubleClick={() => this.selectMarker(marker)}
-                    className="fas fa-map-marker-alt fa-2x"
-                ></i>
-            </Marker>)
-    }
-
     addMarker(e) {
         this.setState({
             coordinates: this.state.coordinates.concat({
@@ -42,8 +26,9 @@ class Map extends Component {
                 latitude: e.lngLat[1]
             })
         })
+
     }
-    selectMarker(marker) {
+    selectMarker = (marker) => {
         this.setState({
             selectedMarker: marker
         });
@@ -53,7 +38,7 @@ class Map extends Component {
             selectedMarker: ''
         });
     };
-    markerDragEnd(e, marker) {
+    markerDragEnd = (e, marker) => {
         const index = this.state.coordinates.findIndex(coord => coord.id === marker.id);
         const temporaryArray = [...this.state.coordinates];
         temporaryArray[index].longitude = e.lngLat[0];
@@ -61,6 +46,7 @@ class Map extends Component {
         this.setState({
             coordinates: temporaryArray
         });
+
     };
 
     render() {
@@ -75,7 +61,11 @@ class Map extends Component {
                 onClick={(e) => this.addMarker(e)}
                 mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_KEY}
             >
-                {this.loadMarkers()}
+                <Markers
+                    coordinates={this.state.coordinates}
+                    markerDragEnd={this.markerDragEnd}
+                    selectMarker={this.selectMarker}
+                />
                 {this.state.selectedMarker !== '' ? (
                     <Popup
                         latitude={latitude}
