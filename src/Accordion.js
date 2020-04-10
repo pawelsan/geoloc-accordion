@@ -9,7 +9,7 @@ import {
     Collapse,
 } from "reactstrap";
 
-function Accordion({ state, handleViewport, addMarker, selectMarker, closePopup, markerDragEnd }) {
+function Accordion({ state, handleViewport, addMarker, selectMarker, closePopup, markerDragEnd, handleDelete }) {
     // collapse states and functions
     const [collapses, setCollapses] = React.useState([]);
     const changeCollapse = collapse => {
@@ -82,6 +82,7 @@ function Accordion({ state, handleViewport, addMarker, selectMarker, closePopup,
                             <CardBody>
                                 <List
                                     coordinates={state.coordinates}
+                                    handleDelete={handleDelete}
                                 />
                             </CardBody>
                         </Collapse>

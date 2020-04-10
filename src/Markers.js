@@ -9,7 +9,7 @@ const Markers = ({ coordinates, markerDragEnd, selectMarker }) => {
                 longitude={marker.longitude}
                 latitude={marker.latitude}
                 draggable
-                onDragEnd={(e) => markerDragEnd(e, marker)}
+                onDragEnd={(e) => markerDragEnd(e, marker.id)}
             >
                 <i
                     onDoubleClick={() => selectMarker(marker)}
