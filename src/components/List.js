@@ -17,7 +17,7 @@ const List = ({ coordinates, handleDelete }) => {
                     <tr
                         key={marker.id}
                     >
-                        <th scope="row">{coordinates.indexOf(marker)}</th>
+                        <th scope="row">{coordinates.indexOf(marker) + 1}</th>
                         <td>{marker.latitude}</td>
                         <td>{marker.longitude}</td>
                         <td>
